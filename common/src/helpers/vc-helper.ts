@@ -48,8 +48,8 @@ export class VcHelper extends VCJS {
         super();
         const defaultDocumentLoader = new DefaultDocumentLoader();
         const dryRunLoader = new DryRunLoader();
-        const didDocumentLoader = new DIDDocumentLoader();
-        const hederaLoader = new HederaLoader();
+        const didDocumentLoader = new DIDDocumentLoader('did:hedera:');
+        const hederaLoader = new HederaLoader('did:hedera:');
         const schemaDocumentLoaderV1 = new SchemaDocumentLoader('schema#');
         const schemaDocumentLoaderV2 = new SchemaDocumentLoader('schema:');
         const contextDocumentLoader = new ContextDocumentLoader('');
