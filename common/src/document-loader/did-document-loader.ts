@@ -8,14 +8,6 @@ import { DidURL, DocumentLoader, IDocumentFormat } from '../hedera-modules';
  */
 export class DIDDocumentLoader extends DocumentLoader {
     /**
-     * Has context
-     * @param iri
-     */
-    public async has(iri: string): Promise<boolean> {
-        return iri.startsWith('did:hedera:');
-    }
-
-    /**
      * Get formatted document
      * @param iri
      */

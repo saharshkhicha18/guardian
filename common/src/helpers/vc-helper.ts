@@ -50,7 +50,8 @@ export class VcHelper extends VCJS {
         const dryRunLoader = new DryRunLoader();
         const didDocumentLoader = new DIDDocumentLoader();
         const hederaLoader = new HederaLoader();
-        const schemaDocumentLoader = new SchemaDocumentLoader();
+        const schemaDocumentLoaderV1 = new SchemaDocumentLoader('schema#');
+        const schemaDocumentLoaderV2 = new SchemaDocumentLoader('schema:');
         const contextDocumentLoader = new ContextDocumentLoader('');
 
         const vcSchemaObjectLoader = new VCSchemaLoader('');
@@ -60,7 +61,8 @@ export class VcHelper extends VCJS {
         this.addDocumentLoader(dryRunLoader);
         this.addDocumentLoader(hederaLoader);
         this.addDocumentLoader(didDocumentLoader);
-        this.addDocumentLoader(schemaDocumentLoader);
+        this.addDocumentLoader(schemaDocumentLoaderV1);
+        this.addDocumentLoader(schemaDocumentLoaderV2);
         this.addDocumentLoader(contextDocumentLoader);
 
         this.addSchemaLoader(vcSchemaObjectLoader);
