@@ -77,11 +77,18 @@ export class Record extends BaseEntity {
         await new Promise<void>((resolve, reject) => {
             try {
                 if (this.document) {
-                    const uuid = GenerateUUIDv4();
-                    const fileStream = DataBaseHelper.gridFS.openUploadStream(uuid);
-                    this.documentFileId = fileStream.id;
+                    const fileStream = DataBaseHelper.gridFS.openUploadStream(
+                        GenerateUUIDv4()
+                    );
+                    fileStream.on('finish', () => {
+                        this.documentFileId = fileStream.id;
+                        resolve()
+                    });
+                    fileStream.on('error', (error) => {
+                        reject(error);
+                    });
                     fileStream.write(JSON.stringify(this.document));
-                    fileStream.end(() => resolve());
+                    fileStream.end();
                 } else {
                     resolve();
                 }
@@ -111,14 +118,20 @@ export class Record extends BaseEntity {
      */
     @OnLoad()
     async loadDocument() {
-        if (this.documentFileId && !this.document) {
-            const fileStream = DataBaseHelper.gridFS.openDownloadStream(this.documentFileId);
-            const bufferArray = [];
-            for await (const data of fileStream) {
-                bufferArray.push(data);
+        try {
+            if (this.documentFileId) {
+                const fileStream = DataBaseHelper.gridFS.openDownloadStream(
+                    this.documentFileId
+                );
+                const bufferArray = [];
+                for await (const data of fileStream) {
+                    bufferArray.push(data);
+                }
+                const buffer = Buffer.concat(bufferArray);
+                this.document = JSON.parse(buffer.toString());
             }
-            const buffer = Buffer.concat(bufferArray);
-            this.document = JSON.parse(buffer.toString());
+        } catch (error) {
+            console.error(error.message)
         }
     }
 

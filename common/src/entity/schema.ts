@@ -1,20 +1,5 @@
-import {
-    ISchema,
-    ISchemaDocument,
-    SchemaCategory,
-    SchemaEntity,
-    SchemaStatus,
-    GenerateUUIDv4,
-} from '@guardian/interfaces';
-import {
-    Entity,
-    Property,
-    Enum,
-    BeforeCreate,
-    OnLoad,
-    BeforeUpdate,
-    AfterDelete,
-} from '@mikro-orm/core';
+import { GenerateUUIDv4, ISchema, ISchemaDocument, SchemaCategory, SchemaEntity, SchemaStatus, } from '@guardian/interfaces';
+import { AfterDelete, BeforeCreate, BeforeUpdate, Entity, Enum, OnLoad, Property, } from '@mikro-orm/core';
 import { BaseEntity } from '../models';
 import { DataBaseHelper, SchemaConverterUtils } from '../helpers';
 import { ObjectId } from '@mikro-orm/mongodb';
@@ -229,9 +214,15 @@ export class Schema extends BaseEntity implements ISchema {
                     const fileStream = DataBaseHelper.gridFS.openUploadStream(
                         GenerateUUIDv4()
                     );
-                    this.documentFileId = fileStream.id;
+                    fileStream.on('finish', () => {
+                        this.documentFileId = fileStream.id;
+                        resolve()
+                    });
+                    fileStream.on('error', (error) => {
+                        reject(error);
+                    });
                     fileStream.write(JSON.stringify(this.document));
-                    fileStream.end(() => resolve());
+                    fileStream.end();
                 } else {
                     resolve();
                 }
@@ -264,16 +255,20 @@ export class Schema extends BaseEntity implements ISchema {
      */
     @OnLoad()
     async loadDocument() {
-        if (this.documentFileId) {
-            const fileStream = DataBaseHelper.gridFS.openDownloadStream(
-                this.documentFileId
-            );
-            const bufferArray = [];
-            for await (const data of fileStream) {
-                bufferArray.push(data);
+        try {
+            if (this.documentFileId) {
+                const fileStream = DataBaseHelper.gridFS.openDownloadStream(
+                    this.documentFileId
+                );
+                const bufferArray = [];
+                for await (const data of fileStream) {
+                    bufferArray.push(data);
+                }
+                const buffer = Buffer.concat(bufferArray);
+                this.document = JSON.parse(buffer.toString());
             }
-            const buffer = Buffer.concat(bufferArray);
-            this.document = JSON.parse(buffer.toString());
+        } catch (error) {
+            console.error(error.message)
         }
     }
 
@@ -300,9 +295,15 @@ export class Schema extends BaseEntity implements ISchema {
                     const fileStream = DataBaseHelper.gridFS.openUploadStream(
                         GenerateUUIDv4()
                     );
-                    this.contextFileId = fileStream.id;
+                    fileStream.on('finish', () => {
+                        this.contextFileId = fileStream.id;
+                        resolve()
+                    });
+                    fileStream.on('error', (error) => {
+                        reject(error);
+                    });
                     fileStream.write(JSON.stringify(this.context));
-                    fileStream.end(() => resolve());
+                    fileStream.end();
                 } else {
                     resolve();
                 }
@@ -333,15 +334,19 @@ export class Schema extends BaseEntity implements ISchema {
     @OnLoad()
     async loadContext() {
         if (this.contextFileId && !this.context) {
-            const fileStream = DataBaseHelper.gridFS.openDownloadStream(
-                this.contextFileId
-            );
-            const bufferArray = [];
-            for await (const data of fileStream) {
-                bufferArray.push(data);
+            try {
+                const fileStream = DataBaseHelper.gridFS.openDownloadStream(
+                    this.contextFileId
+                );
+                const bufferArray = [];
+                for await (const data of fileStream) {
+                    bufferArray.push(data);
+                }
+                const buffer = Buffer.concat(bufferArray);
+                this.context = JSON.parse(buffer.toString());
+            } catch (error) {
+                console.error(error.message)
             }
-            const buffer = Buffer.concat(bufferArray);
-            this.context = JSON.parse(buffer.toString());
         }
     }
 

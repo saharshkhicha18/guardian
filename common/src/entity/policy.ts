@@ -249,9 +249,15 @@ export class Policy extends BaseEntity {
                     const fileStream = DataBaseHelper.gridFS.openUploadStream(
                         GenerateUUIDv4()
                     );
-                    this.configFileId = fileStream.id;
+                    fileStream.on('finish', () => {
+                        this.configFileId = fileStream.id;
+                        resolve()
+                    });
+                    fileStream.on('error', (error) => {
+                        reject(error);
+                    });
                     fileStream.write(JSON.stringify(this.config));
-                    fileStream.end(() => resolve());
+                    fileStream.end();
                 } else {
                     resolve();
                 }
@@ -282,15 +288,19 @@ export class Policy extends BaseEntity {
     @OnLoad()
     async loadConfig() {
         if (this.configFileId && !this.config) {
-            const fileStream = DataBaseHelper.gridFS.openDownloadStream(
-                this.configFileId
-            );
-            const bufferArray = [];
-            for await (const data of fileStream) {
-                bufferArray.push(data);
+            try {
+                const fileStream = DataBaseHelper.gridFS.openDownloadStream(
+                    this.configFileId
+                );
+                const bufferArray = [];
+                for await (const data of fileStream) {
+                    bufferArray.push(data);
+                }
+                const buffer = Buffer.concat(bufferArray);
+                this.config = JSON.parse(buffer.toString());
+            } catch (error) {
+                console.error(error.message)
             }
-            const buffer = Buffer.concat(bufferArray);
-            this.config = JSON.parse(buffer.toString());
         }
     }
 
@@ -317,9 +327,15 @@ export class Policy extends BaseEntity {
                     const fileStream = DataBaseHelper.gridFS.openUploadStream(
                         GenerateUUIDv4()
                     );
-                    this.hashMapFileId = fileStream.id;
+                    fileStream.on('finish', () => {
+                        this.hashMapFileId = fileStream.id;
+                        resolve()
+                    });
+                    fileStream.on('error', (error) => {
+                        reject(error);
+                    });
                     fileStream.write(JSON.stringify(this.hashMap));
-                    fileStream.end(() => resolve());
+                    fileStream.end();
                 } else {
                     resolve();
                 }
@@ -350,15 +366,19 @@ export class Policy extends BaseEntity {
     @OnLoad()
     async loadHashMap() {
         if (this.hashMapFileId && !this.hashMap) {
-            const fileStream = DataBaseHelper.gridFS.openDownloadStream(
-                this.hashMapFileId
-            );
-            const bufferArray = [];
-            for await (const data of fileStream) {
-                bufferArray.push(data);
+            try {
+                const fileStream = DataBaseHelper.gridFS.openDownloadStream(
+                    this.hashMapFileId
+                );
+                const bufferArray = [];
+                for await (const data of fileStream) {
+                    bufferArray.push(data);
+                }
+                const buffer = Buffer.concat(bufferArray);
+                this.hashMap = JSON.parse(buffer.toString());
+            } catch (error) {
+                console.error(error.message);
             }
-            const buffer = Buffer.concat(bufferArray);
-            this.hashMap = JSON.parse(buffer.toString());
         }
     }
 

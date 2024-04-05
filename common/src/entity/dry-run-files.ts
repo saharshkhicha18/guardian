@@ -34,12 +34,15 @@ export class DryRunFiles extends BaseEntity{
                     const fileStream = DataBaseHelper.gridFS.openUploadStream(
                         GenerateUUIDv4()
                     );
-
-                    this.fileId = fileStream.id
-
-                    fileStream.write(file);
-                    delete this.file;
-                    fileStream.end(() => resolve());
+                    fileStream.on('finish', () => {
+                        this.fileId = fileStream.id
+                        resolve()
+                    });
+                    fileStream.on('error', (error) => {
+                        reject(error);
+                    });
+                    fileStream.write(JSON.stringify(this.file));
+                    fileStream.end();
                 } else {
                     resolve();
                 }
@@ -55,14 +58,18 @@ export class DryRunFiles extends BaseEntity{
     @AfterUpdate()
     async loadDocument() {
         if (this.fileId) {
-            const fileStream = DataBaseHelper.gridFS.openDownloadStream(
-                this.fileId
-            );
-            const bufferArray = [];
-            for await (const data of fileStream) {
-                bufferArray.push(data);
+            try {
+                const fileStream = DataBaseHelper.gridFS.openDownloadStream(
+                    this.fileId
+                );
+                const bufferArray = [];
+                for await (const data of fileStream) {
+                    bufferArray.push(data);
+                }
+                this.file = Buffer.concat(bufferArray);
+            } catch (error) {
+                console.error(error.message)
             }
-            this.file = Buffer.concat(bufferArray);
         }
     }
 

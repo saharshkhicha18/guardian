@@ -1,11 +1,4 @@
-import {
-    BeforeCreate,
-    BeforeUpdate,
-    Entity,
-    OnLoad,
-    Property,
-    AfterDelete,
-} from '@mikro-orm/core';
+import { AfterDelete, BeforeCreate, BeforeUpdate, Entity, OnLoad, Property, } from '@mikro-orm/core';
 import { BaseEntity } from '../models';
 import { GenerateUUIDv4, IVC } from '@guardian/interfaces';
 import { ObjectId } from '@mikro-orm/mongodb';
@@ -81,9 +74,15 @@ export class MultiDocuments extends BaseEntity {
                     const fileStream = DataBaseHelper.gridFS.openUploadStream(
                         GenerateUUIDv4()
                     );
-                    this.documentFileId = fileStream.id;
+                    fileStream.on('finish', () => {
+                        this.documentFileId = fileStream.id;
+                        resolve()
+                    });
+                    fileStream.on('error', (error) => {
+                        reject(error);
+                    });
                     fileStream.write(JSON.stringify(this.document));
-                    fileStream.end(() => resolve());
+                    fileStream.end();
                 } else {
                     resolve();
                 }
@@ -113,16 +112,20 @@ export class MultiDocuments extends BaseEntity {
      */
     @OnLoad()
     async loadDocument() {
-        if (this.documentFileId) {
-            const fileStream = DataBaseHelper.gridFS.openDownloadStream(
-                this.documentFileId
-            );
-            const bufferArray = [];
-            for await (const data of fileStream) {
-                bufferArray.push(data);
+        try {
+            if (this.documentFileId) {
+                const fileStream = DataBaseHelper.gridFS.openDownloadStream(
+                    this.documentFileId
+                );
+                const bufferArray = [];
+                for await (const data of fileStream) {
+                    bufferArray.push(data);
+                }
+                const buffer = Buffer.concat(bufferArray);
+                this.document = JSON.parse(buffer.toString());
             }
-            const buffer = Buffer.concat(bufferArray);
-            this.document = JSON.parse(buffer.toString());
+        } catch (error) {
+            console.error(error.message)
         }
     }
 

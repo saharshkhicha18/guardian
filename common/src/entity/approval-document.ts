@@ -1,20 +1,5 @@
-import {
-    ApproveStatus,
-    GenerateUUIDv4,
-    IApprovalDocument,
-    IVC,
-} from '@guardian/interfaces';
-import {
-    Entity,
-    Property,
-    BeforeCreate,
-    Enum,
-    BeforeUpdate,
-    OnLoad,
-    AfterDelete,
-    AfterCreate,
-    AfterUpdate,
-} from '@mikro-orm/core';
+import { ApproveStatus, GenerateUUIDv4, IApprovalDocument, IVC, } from '@guardian/interfaces';
+import { AfterCreate, AfterDelete, AfterUpdate, BeforeCreate, BeforeUpdate, Entity, Enum, OnLoad, Property, } from '@mikro-orm/core';
 import { BaseEntity } from '../models';
 import { ObjectId } from '@mikro-orm/mongodb';
 import { DataBaseHelper } from '../helpers';
@@ -130,28 +115,34 @@ export class ApprovalDocument extends BaseEntity implements IApprovalDocument {
                     const fileStream = DataBaseHelper.gridFS.openUploadStream(
                         GenerateUUIDv4()
                     );
-                    this.documentFileId = fileStream.id;
-                    fileStream.write(JSON.stringify(this.document));
-                    if (this.documentFields) {
-                        const newDocument: any = {};
-                        for (const field of this.documentFields) {
-                            const fieldValue = ObjGet(this.document, field)
-                            if (
-                                (typeof fieldValue === 'string' &&
-                                    fieldValue.length <
+                    fileStream.on('finish', () => {
+                        this.documentFileId = fileStream.id;
+                        if (this.documentFields) {
+                            const newDocument: any = {};
+                            for (const field of this.documentFields) {
+                                const fieldValue = ObjGet(this.document, field)
+                                if (
+                                    (typeof fieldValue === 'string' &&
+                                        fieldValue.length <
                                         (+process.env
-                                            .DOCUMENT_CACHE_FIELD_LIMIT ||
+                                                .DOCUMENT_CACHE_FIELD_LIMIT ||
                                             100)) ||
-                                typeof fieldValue === 'number'
-                            ) {
-                                ObjSet(newDocument, field, fieldValue);
+                                    typeof fieldValue === 'number'
+                                ) {
+                                    ObjSet(newDocument, field, fieldValue);
+                                }
                             }
+                            this.document = newDocument;
+                        } else {
+                            delete this.document;
                         }
-                        this.document = newDocument;
-                    } else {
-                        delete this.document;
-                    }
-                    fileStream.end(() => resolve());
+                        resolve()
+                    });
+                    fileStream.on('error', (error) => {
+                        reject(error);
+                    });
+                    fileStream.write(JSON.stringify(this.document));
+                    fileStream.end();
                 } else {
                     resolve();
                 }
@@ -184,15 +175,19 @@ export class ApprovalDocument extends BaseEntity implements IApprovalDocument {
     @AfterCreate()
     async loadDocument() {
         if (this.documentFileId) {
-            const fileStream = DataBaseHelper.gridFS.openDownloadStream(
-                this.documentFileId
-            );
-            const bufferArray = [];
-            for await (const data of fileStream) {
-                bufferArray.push(data);
+            try {
+                const fileStream = DataBaseHelper.gridFS.openDownloadStream(
+                    this.documentFileId
+                );
+                const bufferArray = [];
+                for await (const data of fileStream) {
+                    bufferArray.push(data);
+                }
+                const buffer = Buffer.concat(bufferArray);
+                this.document = JSON.parse(buffer.toString());
+            } catch (error) {
+                console.error(error.message)
             }
-            const buffer = Buffer.concat(bufferArray);
-            this.document = JSON.parse(buffer.toString());
         }
     }
 
