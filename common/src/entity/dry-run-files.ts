@@ -35,13 +35,14 @@ export class DryRunFiles extends BaseEntity{
                         GenerateUUIDv4()
                     );
                     fileStream.on('finish', () => {
+                        delete this.file;
                         this.fileId = fileStream.id
                         resolve()
                     });
                     fileStream.on('error', (error) => {
                         reject(error);
                     });
-                    fileStream.write(JSON.stringify(this.file));
+                    fileStream.write(JSON.stringify(file));
                     fileStream.end();
                 } else {
                     resolve();
