@@ -3,24 +3,25 @@ import { Guardians } from '../../helpers/guardians.js';
 import { SchemaCategory, SchemaHelper, UserRole } from '@guardian/interfaces';
 import { SchemaUtils } from '../../helpers/schema-utils.js';
 import { Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Post, Put, Req, Response } from '@nestjs/common';
-import { checkPermission } from '../../auth/authorization-helper.js';
 import { ApiTags } from '@nestjs/swagger';
 import { UseCache } from '../../helpers/decorators/cache.js';
+import { Auth } from '../../auth/auth.decorator.js';
 
 @Controller('tags')
 @ApiTags('tags')
+@Auth(UserRole.STANDARD_REGISTRY, UserRole.AUDITOR, UserRole.USER)
 export class TagsApi {
     @Post('/')
     @HttpCode(HttpStatus.CREATED)
+    @Auth(UserRole.STANDARD_REGISTRY, UserRole.USER)
     async setTags(@Req() req, @Response() res): Promise<any> {
-        await checkPermission(UserRole.STANDARD_REGISTRY, UserRole.USER)(req.user);
         try {
             if (!req.headers.authorization || !req.user || !req.user.did) {
                 throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED)
             }
             const guardian = new Guardians();
             const item = await guardian.createTag(req.body, req.user.did);
-            return res.status(201).json(item);
+            return res.status(201).send(item);
         } catch (error) {
             await (new Logger()).error(error, ['API_GATEWAY']);
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -29,6 +30,7 @@ export class TagsApi {
 
     @Post('/search')
     @HttpCode(HttpStatus.OK)
+    @Auth(UserRole.STANDARD_REGISTRY, UserRole.AUDITOR, UserRole.USER)
     async searchTags(@Req() req, @Response() res): Promise<any> {
         try {
             const guardians = new Guardians();
@@ -77,7 +79,7 @@ export class TagsApi {
                     }
                 }
             }
-            return res.json(tagMap);
+            return res.send(tagMap);
         } catch (error) {
             await (new Logger()).error(error, ['API_GATEWAY']);
             throw error
@@ -86,6 +88,7 @@ export class TagsApi {
 
     @Delete('/:uuid')
     @HttpCode(HttpStatus.OK)
+    @Auth(UserRole.STANDARD_REGISTRY, UserRole.AUDITOR, UserRole.USER)
     async deleteTag(@Req() req, @Response() res): Promise<any> {
         if (!req.user) {
             throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED)
@@ -96,7 +99,7 @@ export class TagsApi {
                 throw new HttpException('Invalid uuid', HttpStatus.UNPROCESSABLE_ENTITY)
             }
             const result = await guardian.deleteTag(req.params.uuid, req.user.did);
-            return res.json(result);
+            return res.send(result);
         } catch (error) {
             await (new Logger()).error(error, ['API_GATEWAY']);
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -106,8 +109,8 @@ export class TagsApi {
 
     @Post('/synchronization')
     @HttpCode(HttpStatus.OK)
+    @Auth(UserRole.STANDARD_REGISTRY, UserRole.USER)
     async synchronizationTags(@Req() req, @Response() res): Promise<any> {
-        await checkPermission(UserRole.STANDARD_REGISTRY, UserRole.USER)(req.user);
         if (!req.headers.authorization || !req.user || !req.user.did) {
             throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED)
         }
@@ -131,7 +134,7 @@ export class TagsApi {
                 tags,
                 refreshDate: (new Date()).toISOString(),
             }
-            return res.json(result);
+            return res.send(result);
         } catch (error) {
             await (new Logger()).error(error, ['API_GATEWAY']);
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -145,8 +148,8 @@ export class TagsApi {
     @Get('/schemas')
     @HttpCode(HttpStatus.OK)
     @UseCache({ isExpress: true })
+    @Auth(UserRole.STANDARD_REGISTRY)
     async getSchemas(@Req() req, @Response() res): Promise<any> {
-        await checkPermission(UserRole.STANDARD_REGISTRY)(req.user);
         try {
             const user = req.user;
             const guardians = new Guardians();
@@ -161,8 +164,8 @@ export class TagsApi {
             items.forEach((s) => { s.readonly = s.readonly || s.owner !== owner });
             res.locals.data = SchemaUtils.toOld(items)
             return res
-                .setHeader('X-Total-Count', count)
-                .json(SchemaUtils.toOld(items));
+                .header('X-Total-Count', count)
+                .send(SchemaUtils.toOld(items));
         } catch (error) {
             await (new Logger()).error(error, ['API_GATEWAY']);
             throw error;
@@ -171,8 +174,8 @@ export class TagsApi {
 
     @Post('/schemas')
     @HttpCode(HttpStatus.CREATED)
+    @Auth(UserRole.STANDARD_REGISTRY)
     async postSchemas(@Req() req, @Response() res): Promise<any> {
-        await checkPermission(UserRole.STANDARD_REGISTRY)(req.user);
         try {
             const user = req.user;
             const newSchema = req.body;
@@ -194,7 +197,7 @@ export class TagsApi {
             SchemaHelper.updateOwner(newSchema, owner);
             const schema = await guardians.createTagSchema(newSchema);
 
-            return res.status(201).json(SchemaUtils.toOld(schema));
+            return res.status(201).send(SchemaUtils.toOld(schema));
         } catch (error) {
             await (new Logger()).error(error, ['API_GATEWAY']);
             throw error;
@@ -203,8 +206,8 @@ export class TagsApi {
 
     @Delete('/schemas/:schemaId')
     @HttpCode(HttpStatus.OK)
+    @Auth(UserRole.STANDARD_REGISTRY)
     async deleteSchema(@Req() req, @Response() res): Promise<any> {
-        await checkPermission(UserRole.STANDARD_REGISTRY)(req.user);
         try {
             const user = req.user;
             const guardians = new Guardians();
@@ -215,7 +218,7 @@ export class TagsApi {
                 throw new HttpException(error, HttpStatus.FORBIDDEN)
             }
             await guardians.deleteSchema(schemaId, user?.did);
-            return res.json(true);
+            return res.send(true);
         } catch (error) {
             await (new Logger()).error(error, ['API_GATEWAY']);
             throw error;
@@ -224,8 +227,8 @@ export class TagsApi {
 
     @Put('/schemas/:schemaId')
     @HttpCode(HttpStatus.OK)
+    @Auth(UserRole.STANDARD_REGISTRY)
     async setTag(@Req() req, @Response() res): Promise<any> {
-        await checkPermission(UserRole.STANDARD_REGISTRY)(req.user);
         try {
             const user = req.user;
             const newSchema = req.body;
@@ -240,7 +243,7 @@ export class TagsApi {
             SchemaHelper.checkSchemaKey(newSchema);
             SchemaHelper.updateOwner(newSchema, owner);
             await guardians.updateSchema(newSchema);
-            return res.json(newSchema);
+            return res.send(newSchema);
         } catch (error) {
             await (new Logger()).error(error, ['API_GATEWAY']);
             throw error;
@@ -249,8 +252,8 @@ export class TagsApi {
 
     @Put('/schemas/:schemaId/publish')
     @HttpCode(HttpStatus.OK)
+    @Auth(UserRole.STANDARD_REGISTRY)
     async publishTag(@Req() req, @Response() res): Promise<any> {
-        await checkPermission(UserRole.STANDARD_REGISTRY)(req.user);
         const user = req.user;
         const guardians = new Guardians();
         const schemaId = req.params.schemaId;
@@ -268,7 +271,7 @@ export class TagsApi {
         }
         try {
             const result = await guardians.publishTagSchema(schemaId, version, user.did);
-            return res.json(result);
+            return res.send(result);
         } catch (error) {
             await (new Logger()).error(error, ['API_GATEWAY']);
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -277,8 +280,8 @@ export class TagsApi {
 
     @Get('/schemas/published')
     @HttpCode(HttpStatus.OK)
+    @Auth(UserRole.STANDARD_REGISTRY, UserRole.USER)
     async getPublished(@Req() req, @Response() res): Promise<any> {
-        await checkPermission(UserRole.STANDARD_REGISTRY, UserRole.USER)(req.user);
         try {
             const guardians = new Guardians();
             const schemas = await guardians.getPublishedTagSchemas();
