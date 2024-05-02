@@ -51,7 +51,7 @@ import { CACHE } from '../../constants/index.js';
 import { UseCache } from '../../helpers/decorators/cache.js';
 import { MultipartFile } from '../../helpers/interceptors/types/index.js';
 import { UploadedFiles } from '../../helpers/decorators/file.js';
-import { FilesInterceptor } from '../../helpers/interceptors/multipart.js';
+import { AnyFilesInterceptor } from '../../helpers/interceptors/multipart.js';
 
 const ONLY_SR = ' Only users with the Standard Registry role are allowed to make the request.'
 
@@ -1622,7 +1622,7 @@ export class PolicyApi {
         type: InternalServerErrorDTO
     })
     @HttpCode(HttpStatus.ACCEPTED)
-    @UseInterceptors(FilesInterceptor())
+    @UseInterceptors(AnyFilesInterceptor())
     async importPolicyFromFileWithMetadataAsync(
         @AuthUser() user: IAuthUser,
         @UploadedFiles() files: MultipartFile[],

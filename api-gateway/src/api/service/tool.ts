@@ -11,7 +11,6 @@ import {
   Put,
   Req,
   Response,
-  UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
 import { TaskAction, UserRole } from '@guardian/interfaces';
@@ -32,9 +31,10 @@ import { TaskManager } from '../../helpers/task-manager.js';
 import { ServiceError } from '../../helpers/service-requests-base.js';
 import { InternalServerErrorDTO, TaskDTO, ToolDTO } from '../../middlewares/validation/schemas/index.js';
 import { ApiImplicitParam } from '@nestjs/swagger/dist/decorators/api-implicit-param.decorator.js';
-import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { UseCache } from '../../helpers/decorators/cache.js';
 import { Auth } from '../../auth/auth.decorator.js';
+import { AnyFilesInterceptor } from '../../helpers/interceptors/multipart.js';
+import { UploadedFiles } from '../../helpers/decorators/file.js';
 
 const ONLY_SR = ' Only users with the Standard Registry role are allowed to make the request.'
 

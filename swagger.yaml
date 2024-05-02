@@ -232,6 +232,7 @@ paths:
       tags: &ref_1
         - analytics
       security:
+        - bearer: []
         - bearerAuth: []
   /analytics/compare/policies:
     post:
@@ -285,6 +286,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_1
       security:
+        - bearer: []
         - bearerAuth: []
   /analytics/compare/modules:
     post:
@@ -328,6 +330,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_1
       security:
+        - bearer: []
         - bearerAuth: []
   /analytics/compare/schemas:
     post:
@@ -369,6 +372,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_1
       security:
+        - bearer: []
         - bearerAuth: []
   /analytics/compare/documents:
     post:
@@ -414,6 +418,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_1
       security:
+        - bearer: []
         - bearerAuth: []
   /analytics/compare/tools:
     post:
@@ -459,6 +464,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_1
       security:
+        - bearer: []
         - bearerAuth: []
   /analytics/compare/policies/export:
     post:
@@ -512,6 +518,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_1
       security:
+        - bearer: []
         - bearerAuth: []
   /analytics/compare/modules/export:
     post:
@@ -555,6 +562,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_1
       security:
+        - bearer: []
         - bearerAuth: []
   /analytics/compare/schemas/export:
     post:
@@ -596,6 +604,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_1
       security:
+        - bearer: []
         - bearerAuth: []
   /analytics/compare/documents/export:
     post:
@@ -641,6 +650,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_1
       security:
+        - bearer: []
         - bearerAuth: []
   /analytics/compare/tools/export:
     post:
@@ -686,6 +696,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_1
       security:
+        - bearer: []
         - bearerAuth: []
   /analytics/search/blocks:
     post:
@@ -726,6 +737,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_1
       security:
+        - bearer: []
         - bearerAuth: []
   /artifacts:
     get:
@@ -832,6 +844,7 @@ paths:
       tags:
         - artifacts
       security:
+        - bearer: []
         - bearerAuth: []
   /artifacts/{artifactId}:
     delete:
@@ -925,6 +938,7 @@ paths:
         - contracts
       security:
         - bearer: []
+        - bearer: []
     post:
       operationId: ContractsApi_createContract
       summary: Create contract.
@@ -960,6 +974,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_2
       security:
+        - bearer: []
         - bearer: []
   /contracts/import:
     post:
@@ -1004,6 +1019,7 @@ paths:
       tags: *ref_2
       security:
         - bearer: []
+        - bearer: []
   /contracts/{contractId}/permissions:
     get:
       operationId: ContractsApi_contractPermissions
@@ -1039,6 +1055,7 @@ paths:
       tags: *ref_2
       security:
         - bearer: []
+        - bearer: []
   /contracts/{contractId}:
     delete:
       operationId: ContractsApi_removeContract
@@ -1073,6 +1090,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_2
       security:
+        - bearer: []
         - bearer: []
   /contracts/wipe/requests:
     get:
@@ -1132,6 +1150,7 @@ paths:
       tags: *ref_2
       security:
         - bearer: []
+        - bearer: []
   /contracts/wipe/{contractId}/requests/enable:
     post:
       operationId: ContractsApi_enableWipeRequests
@@ -1162,6 +1181,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_2
       security:
+        - bearer: []
         - bearer: []
   /contracts/wipe/{contractId}/requests/disable:
     post:
@@ -1194,6 +1214,7 @@ paths:
       tags: *ref_2
       security:
         - bearer: []
+        - bearer: []
   /contracts/wipe/requests/{requestId}/approve:
     post:
       operationId: ContractsApi_approveWipeRequest
@@ -1224,6 +1245,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_2
       security:
+        - bearer: []
         - bearer: []
   /contracts/wipe/requests/{requestId}/reject:
     delete:
@@ -1262,6 +1284,7 @@ paths:
       tags: *ref_2
       security:
         - bearer: []
+        - bearer: []
   /contracts/wipe/{contractId}/requests:
     delete:
       operationId: ContractsApi_clearWipeRequests
@@ -1292,6 +1315,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_2
       security:
+        - bearer: []
         - bearer: []
   /contracts/wipe/{contractId}/admin/{hederaId}:
     post:
@@ -1331,6 +1355,7 @@ paths:
       tags: *ref_2
       security:
         - bearer: []
+        - bearer: []
     delete:
       operationId: ContractsApi_wipeRemoveAdmin
       summary: Remove wipe admin.
@@ -1367,6 +1392,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_2
       security:
+        - bearer: []
         - bearer: []
   /contracts/wipe/{contractId}/manager/{hederaId}:
     post:
@@ -1406,6 +1432,7 @@ paths:
       tags: *ref_2
       security:
         - bearer: []
+        - bearer: []
     delete:
       operationId: ContractsApi_wipeRemoveManager
       summary: Remove wipe manager.
@@ -1442,6 +1469,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_2
       security:
+        - bearer: []
         - bearer: []
   /contracts/wipe/{contractId}/wiper/{hederaId}:
     post:
@@ -1481,6 +1509,7 @@ paths:
       tags: *ref_2
       security:
         - bearer: []
+        - bearer: []
     delete:
       operationId: ContractsApi_wipeRemoveWiper
       summary: Remove wipe wiper.
@@ -1518,6 +1547,7 @@ paths:
       tags: *ref_2
       security:
         - bearer: []
+        - bearer: []
   /contracts/retire/{contractId}/pools/sync:
     post:
       operationId: ContractsApi_retireSyncPools
@@ -1552,6 +1582,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_2
       security:
+        - bearer: []
         - bearer: []
   /contracts/retire/requests:
     get:
@@ -1608,6 +1639,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_2
       security:
+        - bearer: []
         - bearer: []
   /contracts/retire/pools:
     get:
@@ -1672,6 +1704,7 @@ paths:
       tags: *ref_2
       security:
         - bearer: []
+        - bearer: []
   /contracts/retire/{contractId}/requests:
     delete:
       operationId: ContractsApi_clearRetireRequests
@@ -1707,6 +1740,7 @@ paths:
       tags: *ref_2
       security:
         - bearer: []
+        - bearer: []
   /contracts/retire/{contractId}/pools:
     delete:
       operationId: ContractsApi_clearRetirePools
@@ -1741,6 +1775,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_2
       security:
+        - bearer: []
         - bearer: []
     post:
       operationId: ContractsApi_setRetirePool
@@ -1782,6 +1817,7 @@ paths:
       tags: *ref_2
       security:
         - bearer: []
+        - bearer: []
   /contracts/retire/pools/{poolId}:
     delete:
       operationId: ContractsApi_unsetRetirePool
@@ -1817,6 +1853,7 @@ paths:
       tags: *ref_2
       security:
         - bearer: []
+        - bearer: []
   /contracts/retire/requests/{requestId}:
     delete:
       operationId: ContractsApi_unsetRetireRequest
@@ -1851,6 +1888,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_2
       security:
+        - bearer: []
         - bearer: []
   /contracts/retire/pools/{poolId}/retire:
     post:
@@ -1891,6 +1929,7 @@ paths:
       tags: *ref_2
       security:
         - bearer: []
+        - bearer: []
   /contracts/retire/requests/{requestId}/approve:
     post:
       operationId: ContractsApi_approveRetire
@@ -1922,6 +1961,7 @@ paths:
       tags: *ref_2
       security:
         - bearer: []
+        - bearer: []
   /contracts/retire/requests/{requestId}/cancel:
     delete:
       operationId: ContractsApi_cancelRetireRequest
@@ -1950,6 +1990,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_2
       security:
+        - bearer: []
         - bearer: []
   /contracts/retire/{contractId}/admin/{hederaId}:
     post:
@@ -1989,6 +2030,7 @@ paths:
       tags: *ref_2
       security:
         - bearer: []
+        - bearer: []
     delete:
       operationId: ContractsApi_retireRemoveAdmin
       summary: Remove wipe admin.
@@ -2025,6 +2067,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_2
       security:
+        - bearer: []
         - bearer: []
   /contracts/retire:
     get:
@@ -2074,6 +2117,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_2
       security:
+        - bearer: []
         - bearer: []
   /demo/registered-users:
     get:
@@ -2438,17 +2482,21 @@ paths:
       operationId: ModulesApi_getModuleSchemas
       parameters: []
       responses:
-        '200':
-          description: ''
+        '401':
+          description: Unauthorized
       tags: &ref_4
         - modules
+      security:
+        - bearer: []
     post:
       operationId: ModulesApi_postSchemas
       parameters: []
       responses:
-        '201':
-          description: ''
+        '401':
+          description: Unauthorized
       tags: *ref_4
+      security:
+        - bearer: []
   /modules/{uuid}:
     get:
       tags:
@@ -2893,6 +2941,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ToolDTO'
+        '401':
+          description: Unauthorized
         '500':
           description: Internal server error.
           content:
@@ -2902,6 +2952,7 @@ paths:
       tags: &ref_5
         - tools
       security:
+        - bearer: []
         - bearerAuth: []
     get:
       operationId: ToolsApi_getTools
@@ -2931,6 +2982,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ToolDTO'
+        '401':
+          description: Unauthorized
         '500':
           description: Internal server error.
           content:
@@ -2939,6 +2992,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_5
       security:
+        - bearer: []
         - bearerAuth: []
   /tools/push:
     post:
@@ -2955,6 +3009,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TaskDTO'
+        '401':
+          description: Unauthorized
         '500':
           description: Internal server error.
           content:
@@ -2963,6 +3019,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_5
       security:
+        - bearer: []
         - bearerAuth: []
   /tools/{id}:
     delete:
@@ -2981,6 +3038,8 @@ paths:
       responses:
         '200':
           description: Successful operation.
+        '401':
+          description: Unauthorized
         '500':
           description: Internal server error.
           content:
@@ -2989,6 +3048,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_5
       security:
+        - bearer: []
         - bearerAuth: []
     get:
       operationId: ToolsApi_getToolById
@@ -3022,6 +3082,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_5
       security:
+        - bearer: []
         - bearerAuth: []
     put:
       operationId: ToolsApi_updateTool
@@ -3055,6 +3116,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_5
       security:
+        - bearer: []
         - bearerAuth: []
   /tools/{id}/publish:
     put:
@@ -3091,6 +3153,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_5
       security:
+        - bearer: []
         - bearerAuth: []
   /tools/{id}/push/publish:
     put:
@@ -3127,6 +3190,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_5
       security:
+        - bearer: []
         - bearerAuth: []
   /tools/validate:
     post:
@@ -3155,6 +3219,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_5
       security:
+        - bearer: []
         - bearerAuth: []
   /tools/{id}/export/file:
     get:
@@ -3188,6 +3253,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_5
       security:
+        - bearer: []
         - bearerAuth: []
   /tools/{id}/export/message:
     get:
@@ -3223,6 +3289,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_5
       security:
+        - bearer: []
         - bearerAuth: []
   /tools/import/message/preview:
     post:
@@ -3252,6 +3319,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_5
       security:
+        - bearer: []
         - bearerAuth: []
   /tools/import/message:
     post:
@@ -3281,6 +3349,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_5
       security:
+        - bearer: []
         - bearerAuth: []
   /tools/import/file/preview:
     post:
@@ -3310,6 +3379,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_5
       security:
+        - bearer: []
         - bearerAuth: []
   /tools/import/file:
     post:
@@ -3339,6 +3409,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_5
       security:
+        - bearer: []
         - bearerAuth: []
   /tools/import/file-metadata:
     post:
@@ -3382,6 +3453,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_5
       security:
+        - bearer: []
         - bearerAuth: []
   /tools/push/import/file:
     post:
@@ -3411,6 +3483,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_5
       security:
+        - bearer: []
         - bearerAuth: []
   /tools/push/import/file-metadata:
     post:
@@ -3454,6 +3527,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_5
       security:
+        - bearer: []
         - bearerAuth: []
   /tools/push/import/message:
     post:
@@ -3483,6 +3557,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_5
       security:
+        - bearer: []
         - bearerAuth: []
   /tools/menu/all:
     get:
@@ -3511,6 +3586,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_5
       security:
+        - bearer: []
         - bearerAuth: []
   /profiles/{username}:
     get:
@@ -3930,6 +4006,8 @@ paths:
                       type: string
                     id:
                       type: string
+        '401':
+          description: Unauthorized
         '500':
           description: Internal server error.
           content:
@@ -3939,6 +4017,7 @@ paths:
       tags: &ref_7
         - policies
       security:
+        - bearer: []
         - bearerAuth: []
   /policies/push/migrate-data:
     post:
@@ -3962,6 +4041,8 @@ paths:
             application/json:
               schema:
                 type: object
+        '401':
+          description: Unauthorized
         '500':
           description: Internal server error.
           content:
@@ -3970,6 +4051,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_7
       security:
+        - bearer: []
         - bearerAuth: []
   /policies/push:
     post:
@@ -4017,6 +4099,8 @@ paths:
             application/json:
               schema:
                 type: object
+        '401':
+          description: Unauthorized
         '500':
           description: Internal server error.
           content:
@@ -4025,16 +4109,18 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_7
       security:
+        - bearer: []
         - bearerAuth: []
         - bearerAuth: []
     delete:
       operationId: PolicyApi_deletePolicyAsync
       parameters: []
       responses:
-        '202':
-          description: ''
+        '401':
+          description: Unauthorized
       tags: *ref_7
       security:
+        - bearer: []
         - bearerAuth: []
   /policies/{policyId}:
     get:
@@ -4279,6 +4365,8 @@ paths:
                 type: array
                 items:
                   type: object
+        '401':
+          description: Unauthorized
         '500':
           description: Internal server error.
           content:
@@ -4287,6 +4375,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_7
       security:
+        - bearer: []
         - bearerAuth: []
         - bearerAuth: []
   /policies/{policyId}/draft:
@@ -4370,6 +4459,8 @@ paths:
             application/json:
               schema:
                 type: object
+        '401':
+          description: Unauthorized
         '500':
           description: Internal server error.
           content:
@@ -4378,6 +4469,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_7
       security:
+        - bearer: []
         - bearerAuth: []
         - bearerAuth: []
   /policies/{policyId}/groups:
@@ -4518,6 +4610,8 @@ paths:
                 type: array
                 items:
                   type: object
+        '401':
+          description: Unauthorized
         '500':
           description: Internal server error.
           content:
@@ -4526,6 +4620,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_7
       security:
+        - bearer: []
         - bearerAuth: []
         - bearerAuth: []
   /policies/{policyId}/blocks:
@@ -4655,6 +4750,8 @@ paths:
             application/json:
               schema:
                 type: object
+        '401':
+          description: Unauthorized
         '500':
           description: Internal server error.
           content:
@@ -4663,6 +4760,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_7
       security:
+        - bearer: []
         - bearerAuth: []
         - bearerAuth: []
     get:
@@ -4679,6 +4777,8 @@ paths:
             application/json:
               schema:
                 type: object
+        '401':
+          description: Unauthorized
         '500':
           description: Internal server error.
           content:
@@ -4687,6 +4787,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_7
       security:
+        - bearer: []
         - bearerAuth: []
         - bearerAuth: []
   /policies/{policyId}/tag/{tagName}:
@@ -4704,6 +4805,8 @@ paths:
             application/json:
               schema:
                 type: object
+        '401':
+          description: Unauthorized
         '500':
           description: Internal server error.
           content:
@@ -4712,6 +4815,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_7
       security:
+        - bearer: []
         - bearerAuth: []
         - bearerAuth: []
   /policies/{policyId}/blocks/{uuid}/parents:
@@ -4719,9 +4823,11 @@ paths:
       operationId: PolicyApi_getBlockParents
       parameters: []
       responses:
-        '200':
-          description: ''
+        '401':
+          description: Unauthorized
       tags: *ref_7
+      security:
+        - bearer: []
   /policies/{policyId}/export/file:
     get:
       tags:
@@ -5361,9 +5467,11 @@ paths:
       operationId: PolicyApi_getBlockAbout
       parameters: []
       responses:
-        '200':
-          description: ''
+        '401':
+          description: Unauthorized
       tags: *ref_7
+      security:
+        - bearer: []
   /policies/{policyId}/dry-run/users:
     get:
       tags:
@@ -5858,6 +5966,7 @@ paths:
       tags: &ref_8
         - schema
       security:
+        - bearer: []
         - bearerAuth: []
   /schema/{schemaId}/tree:
     get:
@@ -5899,6 +6008,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_8
       security:
+        - bearer: []
         - bearerAuth: []
   /schemas:
     get:
@@ -6088,6 +6198,7 @@ paths:
       tags: &ref_9
         - schemas
       security:
+        - bearer: []
         - bearerAuth: []
   /schemas/list/all:
     get:
@@ -6118,6 +6229,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_9
       security:
+        - bearer: []
         - bearerAuth: []
   /schemas/list/sub:
     get:
@@ -6160,6 +6272,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_9
       security:
+        - bearer: []
         - bearerAuth: []
   /schemas/push/copy:
     post:
@@ -7315,19 +7428,24 @@ paths:
       operationId: SettingsApi_getAbout
       parameters: []
       responses:
-        '200':
-          description: ''
+        '401':
+          description: Unauthorized
       tags:
         - settings
+      security:
+        - bearer: []
   /tags:
     post:
       operationId: TagsApi_setTags
       parameters: []
       responses:
-        '201':
-          description: ''
+        '401':
+          description: Unauthorized
       tags:
         - tags
+      security:
+        - bearer: []
+        - bearer: []
   /tags/search:
     post:
       tags:
@@ -7876,10 +7994,12 @@ paths:
       operationId: TokensApi_deleteTokenAsync
       parameters: []
       responses:
-        '202':
-          description: ''
+        '401':
+          description: Unauthorized
       tags: &ref_10
         - tokens
+      security:
+        - bearer: []
   /tokens/{tokenId}/associate:
     put:
       tags:
@@ -8432,6 +8552,7 @@ paths:
       tags: *ref_10
       security:
         - bearer: []
+        - bearer: []
   /themes:
     get:
       tags:
@@ -8861,6 +8982,8 @@ paths:
             application/json:
               schema:
                 type: boolean
+        '401':
+          description: Unauthorized
         '500':
           description: Internal server error.
           content:
@@ -8869,6 +8992,8 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags:
         - wizard
+      security:
+        - bearer: []
   /wizard/{policyId}/config:
     post:
       tags:
@@ -8970,6 +9095,7 @@ paths:
         - suggestions
       security:
         - bearer: []
+        - bearer: []
         - bearerAuth: []
   /suggestions/config:
     post:
@@ -9003,6 +9129,7 @@ paths:
       tags: *ref_12
       security:
         - bearer: []
+        - bearer: []
         - bearerAuth: []
     get:
       operationId: SuggestionsApi_getPolicySuggestionsConfig
@@ -9028,6 +9155,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_12
       security:
+        - bearer: []
         - bearer: []
         - bearerAuth: []
   /notifications:
@@ -9060,6 +9188,7 @@ paths:
         - notifications
       security:
         - bearer: []
+        - bearer: []
         - bearerAuth: []
   /notifications/new:
     get:
@@ -9086,6 +9215,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_13
       security:
+        - bearer: []
         - bearer: []
         - bearerAuth: []
   /notifications/progresses:
@@ -9114,6 +9244,7 @@ paths:
       tags: *ref_13
       security:
         - bearer: []
+        - bearer: []
         - bearerAuth: []
   /notifications/read/all:
     post:
@@ -9140,6 +9271,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_13
       security:
+        - bearer: []
         - bearer: []
         - bearerAuth: []
   /notifications/delete/{notificationId}:
@@ -9170,6 +9302,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_13
       security:
+        - bearer: []
         - bearer: []
         - bearerAuth: []
   /projects/search:
