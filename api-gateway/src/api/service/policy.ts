@@ -26,10 +26,9 @@ import {
     Query,
     Req,
     Response,
-    UploadedFiles,
     UseInterceptors,
+    Request
 } from '@nestjs/common';
-import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import {
     ApiAcceptedResponse,
     ApiBody,
@@ -50,6 +49,9 @@ import { ApiImplicitParam } from '@nestjs/swagger/dist/decorators/api-implicit-p
 import { ApiImplicitQuery } from '@nestjs/swagger/dist/decorators/api-implicit-query.decorator.js';
 import { CACHE } from '../../constants/index.js';
 import { UseCache } from '../../helpers/decorators/cache.js';
+import { MultipartFile } from '../../helpers/interceptors/types/index.js';
+import { UploadedFiles } from '../../helpers/decorators/file.js';
+import { FilesInterceptor } from '../../helpers/interceptors/multipart.js';
 
 const ONLY_SR = ' Only users with the Standard Registry role are allowed to make the request.'
 
@@ -1474,13 +1476,15 @@ export class PolicyApi {
         type: InternalServerErrorDTO
     })
     @HttpCode(HttpStatus.CREATED)
-    @UseInterceptors(AnyFilesInterceptor())
+    // @UseInterceptors(FilesInterceptor('files'))
     async importPolicyFromFileWithMetadata(
         @AuthUser() user: IAuthUser,
-        @UploadedFiles() files: any,
+        // @UploadedFiles() files: any,
         @Query('versionOfTopicId') versionOfTopicId,
+        @Request() request
     ): Promise<any> {
       console.log('multipart/form-data');
+        const files = request.files();
         try {
             const policyFile = files.find(
                 (item) => item.fieldname === 'policyFile'
@@ -1618,10 +1622,10 @@ export class PolicyApi {
         type: InternalServerErrorDTO
     })
     @HttpCode(HttpStatus.ACCEPTED)
-    @UseInterceptors(AnyFilesInterceptor())
+    @UseInterceptors(FilesInterceptor())
     async importPolicyFromFileWithMetadataAsync(
         @AuthUser() user: IAuthUser,
-        @UploadedFiles() files: any,
+        @UploadedFiles() files: MultipartFile[],
         @Query('versionOfTopicId') versionOfTopicId,
     ): Promise<any> {
         const taskManager = new TaskManager();
