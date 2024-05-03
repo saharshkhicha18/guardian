@@ -389,8 +389,8 @@ export class ContractsApi {
         type: InternalServerErrorDTO,
     })
     @HttpCode(HttpStatus.OK)
-    @UseCache({ isExpress: true })
     @Auth(UserRole.STANDARD_REGISTRY)
+    // @UseCache({ isExpress: true })
     async getWipeRequests(@Req() req, @Response() res): Promise<any> {
         try {
             const user = req.user;
@@ -1113,8 +1113,8 @@ export class ContractsApi {
         type: InternalServerErrorDTO,
     })
     @HttpCode(HttpStatus.OK)
-    @UseCache({ isExpress: true })
     @Auth(UserRole.STANDARD_REGISTRY, UserRole.USER)
+    // @UseCache({ isExpress: true })
     async getRetireRequests(@Req() req, @Response() res): Promise<any> {
         try {
             const user = req.user;
@@ -1200,8 +1200,8 @@ export class ContractsApi {
         type: InternalServerErrorDTO,
     })
     @HttpCode(HttpStatus.OK)
-    @UseCache({ isExpress: true })
     @Auth(UserRole.STANDARD_REGISTRY, UserRole.USER)
+    // @UseCache({ isExpress: true })
     async getRetirePools(@Req() req, @Response() res): Promise<any> {
         try {
             const user = req.user;
@@ -1779,8 +1779,8 @@ export class ContractsApi {
         type: InternalServerErrorDTO,
     })
     @HttpCode(HttpStatus.OK)
-    @UseCache({ isExpress: true })
     @Auth(UserRole.STANDARD_REGISTRY, UserRole.USER)
+    // @UseCache({ isExpress: true })
     async getRetireVCs(@Req() req, @Response() res): Promise<any> {
         try {
             const user = req.user;
