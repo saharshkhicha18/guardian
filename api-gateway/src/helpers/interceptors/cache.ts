@@ -1,12 +1,13 @@
 import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
 
-import crypto from 'crypto';
-
 import { Observable, of, switchMap, tap } from 'rxjs';
 
 //services
 import { CacheService } from '../cache-service.js';
 import { Users } from '../users.js';
+
+//utils
+import { getCacheKey } from './utils/index.js';
 
 //constants
 import { CACHE, META_DATA } from '../../constants/index.js';
@@ -32,9 +33,8 @@ export class CacheInterceptor implements NestInterceptor {
       user = await users.getUserByToken(token);
     }
 
-    const hashUser: string = crypto.createHash('md5').update(JSON.stringify(user)).digest('hex');
     const { url: route } = request;
-    const cacheKey = `cache/${route}:${hashUser}`;
+    const cacheKey = getCacheKey(route, user);
 
     return of(null).pipe(
       switchMap(async () => {

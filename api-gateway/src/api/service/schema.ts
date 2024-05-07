@@ -1,5 +1,5 @@
 import { Guardians } from '../../helpers/guardians.js';
-import { ISchema, SchemaCategory, SchemaEntity, SchemaHelper, SchemaStatus, StatusType, TaskAction, UserRole } from '@guardian/interfaces';
+import { ISchema, IUser, SchemaCategory, SchemaEntity, SchemaHelper, SchemaStatus, StatusType, TaskAction, UserRole } from '@guardian/interfaces';
 import { IAuthUser, Logger, RunFunctionAsync, SchemaImportExport } from '@guardian/common';
 import { ApiBody, ApiExtraModels, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiOkResponse, ApiOperation, ApiSecurity, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Param, Post, Put, Req, Response } from '@nestjs/common';
@@ -15,6 +15,8 @@ import { ExportSchemaDTO, InternalServerErrorDTO, MessageSchemaDTO, SchemaDTO, S
 import { Auth } from '../../auth/auth.decorator.js';
 import { CACHE } from '../../constants/index.js';
 import { UseCache } from '../../helpers/decorators/cache.js';
+import { CacheService } from '../../helpers/cache-service.js';
+import { getCacheKey } from '../../helpers/interceptors/utils/index.js';
 
 const ONLY_SR = ' Only users with the Standard Registry role are allowed to make the request.'
 
@@ -269,6 +271,8 @@ export class SingleSchemaApi {
 @Controller('schemas')
 @ApiTags('schemas')
 export class SchemaApi {
+    constructor(private readonly cacheService: CacheService) {
+    }
 
     @Client({
         transport: Transport.NATS,
@@ -364,6 +368,7 @@ export class SchemaApi {
     })
     @HttpCode(HttpStatus.OK)
     @Auth(UserRole.STANDARD_REGISTRY, UserRole.AUDITOR, UserRole.USER)
+    @UseCache()
     async getSchemasPage(@Req() req, @Response() res): Promise<any> {
         try {
             const guardians = new Guardians();
@@ -806,6 +811,7 @@ export class SchemaApi {
     async setSchema(@Req() req, @Response() res): Promise<any> {
         try {
             const user = req.user;
+            await this.cacheService.invalidate(getCacheKey(req.url, user))
             const newSchema = req.body;
             const guardians = new Guardians();
             const schema = await guardians.getSchemaById(newSchema.id);
