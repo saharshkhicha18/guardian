@@ -1,4 +1,4 @@
-import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
+import { Injectable, NestInterceptor, ExecutionContext, CallHandler, HttpException, HttpStatus } from '@nestjs/common';
 
 import { Observable, of, switchMap, tap } from 'rxjs';
 
@@ -30,7 +30,11 @@ export class CacheInterceptor implements NestInterceptor {
 
     if(token) {
       const users: Users = new Users();
-      user = await users.getUserByToken(token);
+      try {
+        user = await users.getUserByToken(token);
+      } catch (error) {
+        throw new HttpException(error.message, HttpStatus.UNAUTHORIZED)
+      }
     }
 
     const { url: route } = request;
