@@ -9,7 +9,6 @@ import { getFileFromPart } from './utils/index.js';
 //types and interfaces
 import { FastifyRequest, MultipartFile, MultipartOptions } from './types/index.js';
 
-
 export function AnyFilesInterceptor(options: MultipartOptions = {}): Type<NestInterceptor> {
   class MixinInterceptor implements NestInterceptor {
     async intercept(context: ExecutionContext, next: CallHandler): Promise<Observable<any>> {
@@ -29,11 +28,7 @@ export function AnyFilesInterceptor(options: MultipartOptions = {}): Type<NestIn
         }
 
         const file: MultipartFile = await getFileFromPart(part);
-        // const validationResult = validateFile(file, options);
 
-        // if (validationResult) throw new HttpException(validationResult, HttpStatus.UNPROCESSABLE_ENTITY);
-
-        files[part.fieldname] = files[part.fieldname] || [];
         files.push(file);
       }
 

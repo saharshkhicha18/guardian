@@ -112,6 +112,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorDTO'
       tags: *ref_0
       security:
+        - bearer: []
         - bearerAuth: []
   /accounts/standard-registries:
     get:
